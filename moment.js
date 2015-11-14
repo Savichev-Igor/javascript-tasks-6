@@ -71,16 +71,15 @@ module.exports = function (moment) {
          */
         format: function (pattern) {
             if (this.date.getUTCHours() + this.timezone < 0) {
-                var answerStr = pattern.replace('%DD', Object.keys(days)[this.date.getDay() - 1]);
                 answerStr = answerStr.replace(
                     '%HH', module.exports.addZero(24 + this.date.getUTCHours() + this.timezone)
                 );
             } else {
-                var answerStr = pattern.replace('%DD', Object.keys(days)[this.date.getDay()]);
                 answerStr = answerStr.replace(
                     '%HH', module.exports.addZero(this.date.getUTCHours() + this.timezone)
                 );
             }
+            var answerStr = pattern.replace('%DD', Object.keys(days)[this.date.getDay()]);
             answerStr = answerStr.replace('%MM', module.exports.addZero(this.date.getUTCMinutes()));
             return answerStr;
         },
