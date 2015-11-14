@@ -69,15 +69,16 @@ module.exports = function (moment) {
          */
         format: function (pattern) {
             var fixedDate = new Date(createdDate.getTime());
-            fixedDate.setHours(fixedDate.getUTCHours() + this.timezone, 0, 0);
             // Если вдруг мы попали на воскресенье из-за ч.п. кого-нибудь
             if (fixedDate.getDate() == 31) {
                 var answerStr = pattern.replace('%DD', Object.keys(days)[6]);
             } else {
                 var answerStr = pattern.replace('%DD', Object.keys(days)[fixedDate.getDate() - 1]);
             }
-            answerStr = answerStr.replace('%HH', module.exports.addZero(fixedDate.getHours()));
-            answerStr = answerStr.replace('%MM', module.exports.addZero(fixedDate.getMinutes()));
+            answerStr = answerStr.replace(
+                '%HH', module.exports.addZero(fixedDate.getUTCHours() + this.timezone)
+            );
+            answerStr = answerStr.replace('%MM', module.exports.addZero(fixedDate.getUTCMinutes()));
             return answerStr;
         },
 
