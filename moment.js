@@ -47,9 +47,9 @@ module.exports = function (moment) {
         if (typeof moment === 'string' && typeof moment !== 'undefined') {
             var parsedDate = parseDate(moment);
             var newDate = new Date();
-            // Выстраиваем дни в последовательности, как в списке
+            // Выстраиваем дни в последовательность, как в списке
             var untilTimeStampDay = (7 - newDate.getUTCDay() + days[parsedDate.day]) % 7;
-            newDate.setUTCDate(newDate.getUTCDay() + untilTimeStampDay);
+            newDate.setUTCDate(newDate.getUTCDate() + untilTimeStampDay);
             newDate.setUTCHours(parsedDate.hours - parsedDate.timezone, parsedDate.minutes, 0, 0);
             return newDate;
         }
@@ -70,12 +70,13 @@ module.exports = function (moment) {
          * @return {string} answerStr
          */
         format: function (pattern) {
-            var answerStr = pattern.replace('%DD', Object.keys(days)[this.date.getDay()]);
             if (this.date.getUTCHours() + this.timezone < 0) {
+                var answerStr = pattern.replace('%DD', Object.keys(days)[this.date.getDay() - 1]);
                 answerStr = answerStr.replace(
                     '%HH', module.exports.addZero(24 + this.date.getUTCHours() + this.timezone)
                 );
             } else {
+                var answerStr = pattern.replace('%DD', Object.keys(days)[this.date.getDay()]);
                 answerStr = answerStr.replace(
                     '%HH', module.exports.addZero(this.date.getUTCHours() + this.timezone)
                 );
