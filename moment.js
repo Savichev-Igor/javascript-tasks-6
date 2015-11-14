@@ -70,6 +70,7 @@ module.exports = function (moment) {
          * @return {string} answerStr
          */
         format: function (pattern) {
+            var answerStr = pattern.replace('%DD', Object.keys(days)[this.date.getDay()]);
             if (this.date.getUTCHours() + this.timezone < 0) {
                 answerStr = answerStr.replace(
                     '%HH', module.exports.addZero(24 + this.date.getUTCHours() + this.timezone)
@@ -79,7 +80,6 @@ module.exports = function (moment) {
                     '%HH', module.exports.addZero(this.date.getUTCHours() + this.timezone)
                 );
             }
-            var answerStr = pattern.replace('%DD', Object.keys(days)[this.date.getDay()]);
             answerStr = answerStr.replace('%MM', module.exports.addZero(this.date.getUTCMinutes()));
             return answerStr;
         },
