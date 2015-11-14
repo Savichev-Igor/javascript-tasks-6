@@ -14,13 +14,13 @@ module.exports = function (moment) {
 
     // Строим биекцию по дате и дню недели
     var days = {
+        'ВС': 0,
         'ПН': 1,
         'ВТ': 2,
         'СР': 3,
         'ЧТ': 4,
         'ПТ': 5,
-        'СБ': 6,
-        'ВС': 7
+        'СБ': 6
     };
 
     /**
@@ -47,7 +47,9 @@ module.exports = function (moment) {
         if (typeof moment === 'string' && typeof moment !== 'undefined') {
             var parsedDate = parseDate(moment);
             var newDate = new Date();
-            newDate.setUTCDate(days[parsedDate.day]);
+            // Выстраиваем дни в последовательности, как в списке
+            var untilTimeStampDay = (7 - newDate.getUTCDay() + days[parsedDate.day]) % 7;
+            newDate.setUTCDate(newDate.getUTCDay() + untilTimeStampDay);
             newDate.setUTCHours(parsedDate.hours - parsedDate.timezone, parsedDate.minutes, 0, 0);
             return newDate;
         }
@@ -68,17 +70,18 @@ module.exports = function (moment) {
          * @return {string} answerStr
          */
         format: function (pattern) {
-            var fixedDate = new Date(createdDate.getTime());
-            // Если вдруг мы попали на воскресенье из-за ч.п. кого-нибудь
-            if (fixedDate.getDate() == 31) {
-                var answerStr = pattern.replace('%DD', Object.keys(days)[6]);
+            if (this.date.getUTCHours() + this.timezone < 0) {
+                var answerStr = pattern.replace('%DD', Object.keys(days)[this.date.getDay() - 1]);
+                answerStr = answerStr.replace(
+                    '%HH', module.exports.addZero(24 + this.date.getUTCHours() + this.timezone)
+                );
             } else {
-                var answerStr = pattern.replace('%DD', Object.keys(days)[fixedDate.getDate() - 1]);
+                var answerStr = pattern.replace('%DD', Object.keys(days)[this.date.getDay()]);
+                answerStr = answerStr.replace(
+                    '%HH', module.exports.addZero(this.date.getUTCHours() + this.timezone)
+                );
             }
-            answerStr = answerStr.replace(
-                '%HH', module.exports.addZero(fixedDate.getUTCHours() + this.timezone)
-            );
-            answerStr = answerStr.replace('%MM', module.exports.addZero(fixedDate.getUTCMinutes()));
+            answerStr = answerStr.replace('%MM', module.exports.addZero(this.date.getUTCMinutes()));
             return answerStr;
         },
 
