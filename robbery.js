@@ -131,7 +131,8 @@ module.exports.getAppropriateMoment = function (json, minDuration, workingHours)
         if (partsFree == partsNumber) {
             if (i + 1 == Object.keys(timesPart).length) {
                 // Если успеваем до ЧТ, иначе всех повяжут с новой сигнализацией
-                if ((timesPart[i]['moment'].date.getHours() + (minDuration / 60)) < 24) {
+                var timeLeft = (timesPart[i]['moment'].date.getHours() + (minDuration / 60));
+                if (timeLeft <= 24) {
                     appropriateMoment = timesPart[i]['moment'];
                     break;
                 }

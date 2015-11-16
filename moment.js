@@ -44,7 +44,7 @@ module.exports = function (moment) {
      * @returns {Date} newDate
      */
     function createDate(moment) {
-        if (typeof moment === 'string' && typeof moment !== 'undefined') {
+        if (typeof moment !== 'undefined') {
             var parsedDate = parseDate(moment);
             var newDate = new Date();
             // Выстраиваем дни в последовательность, как в списке
@@ -100,34 +100,34 @@ module.exports = function (moment) {
             milisecondsLeft = milisecondsLeft % MILLISECONDS_PER_HOUR;
             timeLeft['minutes'] = parseInt(milisecondsLeft / MILLISECONDS_PER_MINUTE);
             var answerStr = '';
-            function getEnd(start_1, start_2, when, what_1, what_2, what_3) {
+            function getEnd(startFirst, startSecond, when, whatFirst, whatSecond, whatThird) {
                 switch (timeLeft[when] % 10) {
                     case 1:
                         if (timeLeft[when] == 11) {
-                            answerStr += start_2 + timeLeft[when] + what_2;
+                            answerStr += startSecond + timeLeft[when] + whatSecond;
                             break;
                         }
-                        answerStr += start_1 + timeLeft[when] + what_1;
+                        answerStr += startFirst + timeLeft[when] + whatFirst;
                         break;
                     case 2:
                         if (timeLeft[when] == 12) {
-                            answerStr += start_2 + timeLeft[when] + what_2;
+                            answerStr += startSecond + timeLeft[when] + whatSecond;
                             break;
                         }
                     case 3:
                         if (timeLeft[when] == 13) {
-                            answerStr += start_2 + timeLeft[when] + what_2;
+                            answerStr += startSecond + timeLeft[when] + whatSecond;
                             break;
                         }
                     case 4:
                         if (timeLeft[when] == 14) {
-                            answerStr += start_2 + timeLeft[when] + what_2;
+                            answerStr += startSecond + timeLeft[when] + whatSecond;
                             break;
                         }
-                        answerStr += start_2 + timeLeft[when] + what_3;
+                        answerStr += startSecond + timeLeft[when] + whatThird;
                         break;
                     default:
-                        answerStr += start_2 + timeLeft[when] + what_2;
+                        answerStr += startSecond + timeLeft[when] + whatSecond;
                 }
             }
             if (timeLeft['days'] != 0) {
